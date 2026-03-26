@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1.1] - 2026-03-26
+
+### Fixed
+
+- Restored explicit `AudioContext` unlocking in direct tap handlers for Safari/iPad so open-string and tuner reference tones can start reliably from touch input
+
 ## [0.1.1.0] - 2026-03-26
 
 ### Added

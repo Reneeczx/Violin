@@ -11,6 +11,7 @@ import {
 import Tracking from '../tracking.js';
 import Timer from '../timer.js';
 import EventBus from '../event-bus.js';
+import audioEngine from '../audio-engine.js';
 import practicePlayer from '../practice-player.js';
 import Recorder from '../recorder.js';
 import {
@@ -296,6 +297,8 @@ function renderPieceSection(card, section) {
   const playBtn = createElement('button', 'btn btn--secondary', '▶ 播放示范');
   playBtn.id = `play-btn-${section.id}`;
   playBtn.addEventListener('click', async () => {
+    await audioEngine.ensureContext();
+
     if (practicePlayer.isDemoPlaying(section.id)) {
       practicePlayer.stop();
       return;
@@ -315,6 +318,8 @@ function renderPieceSection(card, section) {
   const metBtn = createElement('button', 'btn btn--ghost', '🔔 节拍器');
   metBtn.id = `met-btn-${section.id}`;
   metBtn.addEventListener('click', async () => {
+    await audioEngine.ensureContext();
+
     await practicePlayer.toggleClick({
       sectionId: section.id,
       bpm: section.baseBpm,
@@ -347,6 +352,8 @@ function renderStringsSection(card, section) {
     `;
 
     btn.addEventListener('click', async () => {
+      await audioEngine.ensureContext();
+
       if (practicePlayer.isReferencePlaying(section.id, stringData.pitch)) {
         practicePlayer.stop();
         return;
@@ -367,6 +374,8 @@ function renderStringsSection(card, section) {
   const metBtn = createElement('button', 'btn btn--ghost', '🔔 节拍器');
   metBtn.id = `met-btn-${section.id}`;
   metBtn.addEventListener('click', async () => {
+    await audioEngine.ensureContext();
+
     await practicePlayer.toggleClick({
       sectionId: section.id,
       bpm: section.bpm,
