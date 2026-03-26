@@ -69,8 +69,9 @@ function render() {
       </div>
     `;
 
-    card.addEventListener('click', () => {
-      void toggleStringReference(stringData.pitch);
+    card.addEventListener('click', async () => {
+      await audioEngine.ensureContext();
+      await toggleStringReference(stringData.pitch);
     });
     stringsGrid.appendChild(card);
   });
@@ -84,8 +85,9 @@ function render() {
   playAllBtn.style.marginRight = 'auto';
   playAllBtn.style.display = 'flex';
   playAllBtn.id = 'tuner-play-all-btn';
-  playAllBtn.addEventListener('click', () => {
-    void playAllStrings(strings);
+  playAllBtn.addEventListener('click', async () => {
+    await audioEngine.ensureContext();
+    await playAllStrings(strings);
   });
   _container.appendChild(playAllBtn);
 
