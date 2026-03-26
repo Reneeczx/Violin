@@ -26,7 +26,7 @@ const PITCH_MAP = {
   A5: 880.0,
 };
 
-class AudioEngine {
+export class AudioEngine {
   constructor() {
     this._ctx = null;
     this._isPlaying = false;
@@ -35,6 +35,33 @@ class AudioEngine {
     this._masterGain = null;
     this._scheduledTimers = [];
     this._referencePitch = null;
+    this._didPrimeContext = false;
+  }
+
+  _primeContextForGesture() {
+    if (!this._ctx || !this._masterGain || this._didPrimeContext) {
+      return;
+    }
+
+    if (typeof this._ctx.createBuffer !== 'function' || typeof this._ctx.createBufferSource !== 'function') {
+      this._didPrimeContext = true;
+      return;
+    }
+
+    const buffer = this._ctx.createBuffer(1, 1, this._ctx.sampleRate || 22050);
+    const source = this._ctx.createBufferSource();
+    const gain = this._ctx.createGain();
+
+    source.buffer = buffer;
+    gain.gain.value = 0;
+    source.connect(gain);
+    gain.connect(this._masterGain);
+    source.start(0);
+    source.stop?.(0.001);
+
+    this._activeNodes.push(source, gain);
+    this._scheduleCleanup(this._ctx, [source, gain], this._ctx.currentTime + 0.05);
+    this._didPrimeContext = true;
   }
 
   async ensureContext() {
@@ -46,7 +73,10 @@ class AudioEngine {
       this._masterGain.connect(this._ctx.destination);
     }
 
-    if (this._ctx.state === 'suspended') {
+    // Prime a silent source inside the tap/click call stack for iOS Safari.
+    this._primeContextForGesture();
+
+    if (this._ctx.state === 'suspended' || this._ctx.state === 'interrupted') {
       await this._ctx.resume();
     }
 
