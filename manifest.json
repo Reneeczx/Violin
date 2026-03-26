@@ -1,7 +1,7 @@
 {
   "name": "小提琴练习助手",
   "short_name": "练琴助手",
-  "description": "帮助小提琴初学者每日练习",
+  "description": "帮助小提琴初学者进行每日练习与调弦。",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "any",

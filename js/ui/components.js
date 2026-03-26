@@ -1,4 +1,4 @@
-/** Reusable UI component helpers */
+import { buildScoreModel } from '../score-utils.js';
 
 export function createElement(tag, className, innerHTML) {
   const el = document.createElement(tag);
@@ -14,13 +14,15 @@ export function createCard({ title, subtitle, badge, completed, active, content 
 
   let headerHTML = '';
   if (title || badge) {
-    headerHTML = `<div class="card__header">
-      <div>
-        <div class="card__title">${title || ''}</div>
-        ${subtitle ? `<div class="card__subtitle">${subtitle}</div>` : ''}
+    headerHTML = `
+      <div class="card__header">
+        <div>
+          <div class="card__title">${title || ''}</div>
+          ${subtitle ? `<div class="card__subtitle">${subtitle}</div>` : ''}
+        </div>
+        ${badge ? `<span class="card__badge">${badge}</span>` : ''}
       </div>
-      ${badge ? `<span class="card__badge">${badge}</span>` : ''}
-    </div>`;
+    `;
   }
 
   card.innerHTML = headerHTML;
@@ -31,12 +33,13 @@ export function createCard({ title, subtitle, badge, completed, active, content 
       card.appendChild(content);
     }
   }
+
   return card;
 }
 
 export function createProgressDots(total, current, completedDays = []) {
   const container = createElement('div', 'progress-dots');
-  for (let i = 1; i <= total; i++) {
+  for (let i = 1; i <= total; i += 1) {
     const dot = createElement('div', 'progress-dot');
     if (completedDays.includes(i)) dot.classList.add('progress-dot--done');
     if (i === current) dot.classList.add('progress-dot--current');
@@ -51,12 +54,14 @@ export function createCheckbox(label, checked, onChange) {
     <div class="checkbox__box">${checked ? '&#10003;' : ''}</div>
     <span class="checkbox__label">${label}</span>
   `;
+
   container.addEventListener('click', () => {
     checked = !checked;
     container.classList.toggle('checkbox--checked', checked);
     container.querySelector('.checkbox__box').innerHTML = checked ? '&#10003;' : '';
     onChange?.(checked);
   });
+
   return container;
 }
 
@@ -67,61 +72,86 @@ export function createTip(text, icon = '💡') {
   `);
 }
 
-export function createSpeedGroup(speeds, currentSpeed, onSelect) {
+export function createSpeedGroup(speedOptions, currentSpeed, onSelect) {
   const group = createElement('div', 'speed-group');
-  speeds.forEach(speed => {
-    const btn = createElement('button', `speed-btn${speed === currentSpeed ? ' active' : ''}`,
-      speed === 1 ? '原速' : `${Math.round(speed * 100)}%`);
+
+  speedOptions.forEach((speedOption) => {
+    const speed = typeof speedOption === 'number' ? speedOption : speedOption.value;
+    const label = typeof speedOption === 'number'
+      ? (speed === 1 ? '原速' : `${Math.round(speed * 100)}%`)
+      : speedOption.label;
+
+    const btn = createElement('button', `speed-btn${speed === currentSpeed ? ' active' : ''}`, label);
+    btn.dataset.speedValue = String(speed);
     btn.addEventListener('click', () => {
-      group.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      group.querySelectorAll('.speed-btn').forEach((button) => button.classList.remove('active'));
       btn.classList.add('active');
       onSelect(speed);
     });
     group.appendChild(btn);
   });
+
   return group;
 }
 
-export function createScoreDisplay(measures, options = {}) {
+export function createScoreDisplay(measures, { beatsPerMeasure = 4, showBeatNumbers = false } = {}) {
   const container = createElement('div', 'score');
-  let noteIndex = 0;
 
-  measures.forEach((measure, mIdx) => {
-    if (mIdx > 0) {
-      container.appendChild(createElement('div', 'score__barline'));
+  buildScoreModel(measures, { beatsPerMeasure }).forEach((measure) => {
+    const measureEl = createElement('div', 'score__measure');
+    measureEl.dataset.measureIndex = String(measure.measureIndex);
+    measureEl.style.setProperty('--score-grid-columns', String(measure.gridUnits));
+
+    if (showBeatNumbers) {
+      const beatsEl = createElement('div', 'score__beats');
+      beatsEl.style.setProperty('--score-grid-columns', String(measure.gridUnits));
+
+      measure.beatLabels.forEach((beat) => {
+        const beatEl = createElement('div', 'score__beat', String(beat.beatNumber));
+        beatEl.dataset.measureIndex = String(measure.measureIndex);
+        beatEl.dataset.beatNumber = String(beat.beatNumber);
+        beatEl.style.gridColumn = `${beat.gridColumnStart} / span ${beat.gridColumnSpan}`;
+        beatsEl.appendChild(beatEl);
+      });
+
+      measureEl.appendChild(beatsEl);
     }
-    measure.notes.forEach(note => {
-      const noteEl = createElement('div', 'score__note');
-      noteEl.dataset.noteIndex = noteIndex;
 
-      if (note.pitch === 'REST') {
-        noteEl.classList.add('score__note--rest');
-        noteEl.innerHTML = `
-          <span class="score__pitch">-</span>
-          <span class="score__duration">${durationLabel(note.duration)}</span>
-        `;
-      } else {
-        const pitchName = note.pitch.replace(/\d/, '');
-        noteEl.innerHTML = `
-          <span class="score__pitch">${pitchName}</span>
-          <span class="score__duration">${durationLabel(note.duration)}</span>
-        `;
-      }
-      container.appendChild(noteEl);
-      noteIndex++;
+    const notesEl = createElement('div', 'score__notes');
+    notesEl.style.setProperty('--score-grid-columns', String(measure.gridUnits));
+
+    measure.cells.forEach((cell) => {
+      const noteEl = createElement('div', `score__note${cell.isRest ? ' score__note--rest' : ''}`);
+      noteEl.dataset.noteIndex = String(cell.noteIndex);
+      noteEl.dataset.measureIndex = String(cell.measureIndex);
+      noteEl.dataset.startBeat = String(cell.startBeat);
+      noteEl.style.gridColumn = `span ${cell.spanUnits}`;
+      noteEl.innerHTML = `
+        <span class="score__pitch">${cell.pitchName}</span>
+        <span class="score__duration">${durationLabel(cell.duration)}</span>
+      `;
+      notesEl.appendChild(noteEl);
     });
+
+    measureEl.appendChild(notesEl);
+    container.appendChild(measureEl);
   });
 
   return container;
 }
 
 function durationLabel(duration) {
-  const map = { whole: '𝅝', half: '𝅗𝅥', quarter: '♩', eighth: '♪' };
+  const map = {
+    whole: '𝅝',
+    half: '𝅗𝅥',
+    quarter: '♩',
+    eighth: '♪',
+  };
   return map[duration] || duration;
 }
 
 export function formatTime(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
-  return `${m}:${s.toString().padStart(2, '0')}`;
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
