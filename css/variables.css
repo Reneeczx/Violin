@@ -46,6 +46,8 @@
   /* Layout */
   --nav-height: 64px;
   --header-height: 56px;
+  --nav-safe-height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+  --content-bottom-buffer: calc(var(--nav-safe-height) + var(--space-xl));
   --touch-target: 44px;
   --button-height: 48px;
   --button-height-lg: 56px;

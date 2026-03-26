@@ -1,3 +1,5 @@
+import { getOpenStrings } from './open-string-data.js';
+
 /**
  * Daily practice plan generator.
  * Takes the current lesson config and day number (1-7),
@@ -73,15 +75,19 @@ export function generateDailyPlan(lesson, dayNumber) {
 
     // Type-specific fields
     if (exercise.type === 'open-strings') {
-      section.strings = exercise.strings;
+      section.strings = getOpenStrings(lesson);
       section.bpm = progression.bpm || exercise.bpm;
+      section.recommendedBpm = section.bpm;
       section.beatsPerString = exercise.beatsPerString;
     } else if (exercise.type === 'piece') {
       section.measures = exercise.measures;
       section.timeSignature = exercise.timeSignature;
       section.bpm = Math.round(exercise.bpm * (progression.bpmFactor || 1));
+      section.recommendedBpm = section.bpm;
       section.baseBpm = exercise.bpm;
+      section.originalBpm = exercise.bpm;
       section.bpmFactor = progression.bpmFactor || 1;
+      section.recommendedSpeedFactor = section.bpmFactor;
       section.mode = progression.mode || 'arco';
       section.playModes = exercise.playModes;
     }

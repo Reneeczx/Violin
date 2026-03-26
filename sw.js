@@ -1,8 +1,9 @@
-const CACHE_NAME = 'violin-practice-v1';
-const ASSETS = [
+const CACHE_NAME = 'violin-practice-v5';
+const APP_SHELL_ASSETS = [
   './',
   './index.html',
   './manifest.json',
+  './favicon.ico',
   './css/variables.css',
   './css/base.css',
   './css/layout.css',
@@ -15,42 +16,103 @@ const ASSETS = [
   './js/metronome.js',
   './js/recorder.js',
   './js/practice-plan.js',
+  './js/practice-player.js',
+  './js/practice-player-state.js',
+  './js/score-utils.js',
+  './js/open-string-data.js',
   './js/timer.js',
   './js/tracking.js',
+  './js/music-theory.js',
   './js/ui/nav.js',
   './js/ui/components.js',
   './js/ui/home-view.js',
   './js/ui/plan-view.js',
   './js/ui/tuner-view.js',
   './js/ui/progress-view.js',
+  './js/ui/theory-view.js',
   './data/lesson-current.js',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
 ];
 
-// Install: cache all assets
+function isAppShellRequest(url) {
+  return url.pathname === '/'
+    || url.pathname.endsWith('/index.html')
+    || url.pathname.endsWith('/manifest.json')
+    || url.pathname.endsWith('/data/lesson-current.js')
+    || /\/js\/.+\.js$/.test(url.pathname)
+    || /\/css\/.+\.css$/.test(url.pathname);
+}
+
+function isIconRequest(url) {
+  return url.pathname.endsWith('/favicon.ico')
+    || /\/icons\/.+\.(png|jpg|jpeg|svg|webp|ico)$/.test(url.pathname);
+}
+
+async function networkFirst(request) {
+  const cache = await caches.open(CACHE_NAME);
+
+  try {
+    const response = await fetch(request);
+    if (response && response.ok) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (_) {
+    const cached = await cache.match(request);
+    if (cached) {
+      return cached;
+    }
+    throw _;
+  }
+}
+
+async function cacheFirst(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+  if (cached) {
+    return cached;
+  }
+
+  const response = await fetch(request);
+  if (response && response.ok) {
+    cache.put(request, response.clone());
+  }
+  return response;
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+      .then((cache) => cache.addAll(APP_SHELL_ASSETS))
+      .then(() => self.skipWaiting()),
   );
 });
 
-// Activate: clear old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
+      .then(() => self.clients.claim()),
   );
 });
 
-// Fetch: cache-first strategy
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request);
-    })
-  );
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  if (isAppShellRequest(url)) {
+    event.respondWith(networkFirst(event.request));
+    return;
+  }
+
+  if (isIconRequest(url)) {
+    event.respondWith(cacheFirst(event.request));
+  }
 });
