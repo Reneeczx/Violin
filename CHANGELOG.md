@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1.2] - 2026-03-26
+
+### Fixed
+
+- Added a stronger Safari/iPad Web Audio unlock path by priming a silent source inside the first tap gesture and resuming interrupted contexts before playback
+
 ## [0.1.1.1] - 2026-03-26
 
 ### Fixed
