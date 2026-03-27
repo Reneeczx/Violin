@@ -1,8 +1,12 @@
-import { createElement } from './components.js';
+import { createElement, createTip } from './components.js';
 import EventBus from '../event-bus.js';
 import audioEngine from '../audio-engine.js';
 import practicePlayer from '../practice-player.js';
 import { getOpenStrings } from '../open-string-data.js';
+import {
+  getSilentModeHintText,
+  shouldShowSilentModeHint,
+} from '../audio-support.js';
 
 let _container = null;
 let _playAllToken = 0;
@@ -77,6 +81,13 @@ function render() {
   });
 
   _container.appendChild(stringsGrid);
+
+  if (shouldShowSilentModeHint()) {
+    const audioHint = createTip(getSilentModeHintText(), '🔇');
+    audioHint.style.maxWidth = '400px';
+    audioHint.style.margin = 'var(--space-lg) auto 0';
+    _container.appendChild(audioHint);
+  }
 
   const playAllBtn = createElement('button', 'btn btn--primary btn--large btn--full', '▶ 依次播放全部');
   playAllBtn.style.marginTop = 'var(--space-xl)';

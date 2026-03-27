@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1.3] - 2026-03-27
+
+### Added
+
+- Added a lightweight iPad/iPhone audio hint on practice and tuner views to remind users to disable silent mode and raise media volume when a tap seems to produce no sound
+
 ## [0.1.1.2] - 2026-03-26
 
 ### Fixed

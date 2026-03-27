@@ -15,6 +15,10 @@ import audioEngine from '../audio-engine.js';
 import practicePlayer from '../practice-player.js';
 import Recorder from '../recorder.js';
 import {
+  getSilentModeHintText,
+  shouldShowSilentModeHint,
+} from '../audio-support.js';
+import {
   buildSpeedOptions,
   describeTimeSignature,
   formatTempoMarking,
@@ -115,6 +119,12 @@ function render() {
     `,
   });
   _container.appendChild(timerCard);
+
+  if (shouldShowSilentModeHint()) {
+    const audioHint = createTip(getSilentModeHintText(), '🔇');
+    audioHint.style.marginTop = 'var(--space-md)';
+    _container.appendChild(audioHint);
+  }
 
   _timerEl = timerCard.querySelector('#session-timer');
   const timerBtn = timerCard.querySelector('#timer-toggle-btn');
