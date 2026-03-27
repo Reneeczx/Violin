@@ -85,8 +85,8 @@ node --check js/audio-engine.js
 ## Documentation Map
 
 - 项目概览： [README.md](/d:/Violin/README.md)
-- 需求与范围： [REQUIREMENTS.md](/d:/Violin/REQUIREMENTS.md)
-- 架构与模块： [ARCHITECTURE.md](/d:/Violin/ARCHITECTURE.md)
+- 产品需求文档（PRD）： [REQUIREMENTS.md](/d:/Violin/REQUIREMENTS.md)
+- 技术设计文档（Tech Spec）： [ARCHITECTURE.md](/d:/Violin/ARCHITECTURE.md)
 - 开发与维护： [DEVELOPMENT.md](/d:/Violin/DEVELOPMENT.md)
 - 阶段文档流程： [DOCUMENTATION.md](/d:/Violin/DOCUMENTATION.md)
 - 变更历史： [CHANGELOG.md](/d:/Violin/CHANGELOG.md)
