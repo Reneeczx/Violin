@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1.4] - 2026-03-27
+
+### Changed
+
+- Split the homepage practice UI into focused `home-view`, `score-display`, `playback-controls`, and `recording-ui` modules without changing user-facing behavior
+- Updated architecture and development docs to reflect the new homepage UI boundaries
+
+### Added
+
+- Added playback-control state tests covering piece and open-string UI sync cases
+
 ## [0.1.1.3] - 2026-03-27
 
 ### Added

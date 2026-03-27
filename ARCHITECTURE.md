@@ -185,6 +185,9 @@ tracking.js + state.js
 ### 6.7 UI Layer
 
 - [home-view.js](/d:/Violin/js/ui/home-view.js)
+- [score-display.js](/d:/Violin/js/ui/score-display.js)
+- [playback-controls.js](/d:/Violin/js/ui/playback-controls.js)
+- [recording-ui.js](/d:/Violin/js/ui/recording-ui.js)
 - [plan-view.js](/d:/Violin/js/ui/plan-view.js)
 - [tuner-view.js](/d:/Violin/js/ui/tuner-view.js)
 - [progress-view.js](/d:/Violin/js/ui/progress-view.js)
@@ -197,9 +200,12 @@ tracking.js + state.js
 - 监听 `EventBus`
 - 反映播放和录音状态
 
-当前技术债：
+当前结构：
 
-- `home-view.js` 仍然承担较多职责，后续适合进一步拆分
+- `home-view.js` 负责首页装配和事件协调
+- `score-display.js` 负责谱面说明、高亮和自动滚动
+- `playback-controls.js` 负责播放按钮、速度按钮、节拍器和参考音 UI
+- `recording-ui.js` 负责录音按钮和录音列表
 
 ### 6.8 Persistence Layer
 
@@ -379,7 +385,7 @@ node --test --experimental-default-type=module tests/*.test.js
 
 ## 14. Known Technical Risks
 
-- `home-view.js` 过大，后续继续演进时维护成本高
+- 首页 UI 已拆分成装配层和 3 个子模块，后续新增练习类型时继续沿用该边界
 - 当前课程数据是单文件静态配置，不适合长期扩展到多课程
 - 浏览器端音频与录音能力受设备环境影响明显
 - 本地存储缺少跨设备同步
@@ -388,7 +394,7 @@ node --test --experimental-default-type=module tests/*.test.js
 
 潜在后续方向：
 
-- 拆分 `home-view` 降低复杂度
+- 继续维持首页 UI 的模块边界，避免重新堆回单文件
 - 抽象课程数据格式，支持多课程
 - 为老师提供更轻量的课程编辑流程
 - 在不引入重后端的前提下增强数据导入导出能力

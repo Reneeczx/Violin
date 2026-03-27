@@ -30,7 +30,43 @@ node --check js/audio-engine.js
 node --check js/practice-player.js
 ```
 
-## 3. Common Change Workflows
+## 3. Requirements Before Code
+
+Before implementing a new feature in `Violin`, complete this lightweight checklist:
+
+1. **What**
+   - Input
+   - Output
+   - Edge cases
+   - Completion criteria
+2. **UI**
+   - Layout
+   - Key elements
+   - Interaction flow
+   - User-visible states at each step
+3. **Constraints**
+   - Device and browser
+   - Audio / recording / offline behavior
+   - Performance expectations
+   - Platform-specific risks, especially `iPad Safari`
+4. **MVP boundary**
+   - Must-have
+   - Nice-to-have
+   - Explicit `Not now` list
+
+Classify unresolved items before coding:
+
+- `Dialogue`: can be clarified through discussion
+- `Mockup`: needs a visual prototype to evaluate
+- `Spike`: needs a technical feasibility check
+
+Rules:
+
+- For UI-heavy changes, produce a static HTML mockup first and confirm look-and-feel before adding logic.
+- For platform-sensitive changes, produce a minimal technical spike first. Typical examples: audio unlock, recording permissions, PWA install, offline caching.
+- Do not start full implementation until the must-have scope, main interaction flow, and acceptance criteria are explicit.
+
+## 4. Common Change Workflows
 
 ### Update Weekly Lesson Content
 
@@ -51,6 +87,8 @@ node --check js/practice-player.js
 - [practice-player.js](/d:/Violin/js/practice-player.js)
 - [audio-engine.js](/d:/Violin/js/audio-engine.js)
 - [home-view.js](/d:/Violin/js/ui/home-view.js)
+- [playback-controls.js](/d:/Violin/js/ui/playback-controls.js)
+- [score-display.js](/d:/Violin/js/ui/score-display.js)
 
 原则：
 
@@ -63,10 +101,11 @@ node --check js/practice-player.js
 优先检查：
 
 - [home-view.js](/d:/Violin/js/ui/home-view.js)
+- [score-display.js](/d:/Violin/js/ui/score-display.js)
 - [theory-view.js](/d:/Violin/js/ui/theory-view.js)
 - [music-theory.js](/d:/Violin/js/music-theory.js)
 
-## 4. iPad / iPhone Verification
+## 5. iPad / iPhone Verification
 
 每次影响音频、PWA 或触摸交互的改动，都建议在真机确认：
 
@@ -76,7 +115,7 @@ node --check js/practice-player.js
 - PWA 主屏幕模式是否正常
 - 静音模式关闭后是否能稳定听到声音
 
-## 5. Deployment Workflow
+## 6. Deployment Workflow
 
 - 发布分支：`main`
 - 影响部署前必须确认：
@@ -86,7 +125,7 @@ node --check js/practice-player.js
 
 如果三者不一致，先停下确认，不要直接推送。
 
-## 6. Maintenance Notes
+## 7. Maintenance Notes
 
 - 变更用户可感知行为时，更新 [README.md](/d:/Violin/README.md)
 - 变更需求范围或目标时，更新 [REQUIREMENTS.md](/d:/Violin/REQUIREMENTS.md)
