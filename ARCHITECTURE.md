@@ -5,7 +5,7 @@
 - Product: `Violin`
 - Doc type: `Tech Spec`
 - Status: `Active`
-- Last updated: `2026-03-27`
+- Last updated: `2026-03-28`
 - Primary owner: `Engineering / Builder`
 - Related docs:
   - [README.md](/d:/Violin/README.md)
@@ -228,6 +228,28 @@ tracking.js + state.js
 - 调用 `MediaRecorder`
 - 将录音 `Blob` 存入 IndexedDB
 - 读取、删除、播放录音
+
+### 6.9 Learning Mode
+
+- [learning.html](/d:/Violin/learning.html)
+- [learning-app.js](/d:/Violin/js/learning-app.js)
+- [learn-data.js](/d:/Violin/js/learn-data.js)
+- [learn-view.js](/d:/Violin/js/ui/learn-view.js)
+
+Responsibilities:
+
+- Maintain a structured learning map for modules, flows, concepts, code readings, and optional tasks
+- Render a standalone learning page outside the main practice shell
+- Keep learning content grounded in real project files through tests
+
+Design notes:
+
+- `learning.html` is a separate entry point so the learning experience does not compete with the practice navigation
+- `learning-app.js` boots only the learning UI and avoids the main Router / nav setup
+- `learn-data.js` is intentionally pure data so it can be tested without a DOM
+- `learn-view.js` is a thin interactive layer that renders a graph-first single page: module graph on top, current flow below it, then selected-module concepts and code readings
+- The learning UI is intentionally low-load: only the selected module's necessary concepts and one to two code snippets are shown at a time
+- The learning page is builder-facing and does not affect the practice playback domain
 
 ## 7. State Model
 

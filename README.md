@@ -19,6 +19,8 @@
 - 进度统计：展示连续练习天数、总练习时长、成就和本周进度
 - 本周计划：按 7 天展示主题、时长和每日重点
 
+- 学习页：提供独立的模块关系图、当前主线、关键概念和核心代码解读，帮助用项目本身理解实现细节
+
 ## Tech Stack
 
 - 纯前端静态应用，无构建步骤
@@ -69,6 +71,13 @@ node --test --experimental-default-type=module tests/*.test.js
 node --check js/app.js
 node --check js/audio-engine.js
 ```
+
+## Standalone Learning Page
+
+- Preview: `http://127.0.0.1:8124/learning.html`
+- Entry files: `learning.html`, `js/learning-app.js`, `js/learn-data.js`, `js/ui/learn-view.js`, `css/learning.css`
+- Scope: kept separate from the main practice app shell and bottom navigation
+- Includes: dependency graph with current flow highlight, focused concepts for the selected module, and one to two code-reading snippets per core module
 
 ## Deployment
 

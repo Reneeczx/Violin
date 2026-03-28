@@ -105,6 +105,25 @@ Rules:
 - [theory-view.js](/d:/Violin/js/ui/theory-view.js)
 - [music-theory.js](/d:/Violin/js/music-theory.js)
 
+### Update Learning Mode
+
+Start here:
+
+- [learning.html](/d:/Violin/learning.html)
+- [learning-app.js](/d:/Violin/js/learning-app.js)
+- [learn-data.js](/d:/Violin/js/learn-data.js)
+- [learn-view.js](/d:/Violin/js/ui/learn-view.js)
+- [learn-data.test.js](/d:/Violin/tests/learn-data.test.js)
+
+Rules:
+
+- Keep the learning experience independent from the main app shell and bottom navigation
+- Add or edit learning content in `learn-data.js` first; keep the view logic generic
+- Prefer linking to real project files and modules instead of writing abstract tutorial copy
+- Keep the graph as the visual center; concepts and code reading should stay tied to the currently selected module
+- Limit code reading to one or two real snippets per module to avoid beginner overload
+- Run `node --test --experimental-default-type=module tests/*.test.js` after changing module links, task files, or defaults
+
 ## 5. iPad / iPhone Verification
 
 每次影响音频、PWA 或触摸交互的改动，都建议在真机确认：
