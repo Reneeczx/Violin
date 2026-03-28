@@ -78,6 +78,7 @@ node --check js/audio-engine.js
 - Entry files: `learning/index.html`, `learning/js/app.js`, `learning/js/learn-data.js`, `learning/js/ui/learn-view.js`, `learning/css/learning.css`
 - Scope: isolated as a repo-local subapp, separate from the main practice app shell and bottom navigation
 - Includes: dependency graph with current flow highlight, focused concepts for the selected module, and one to two code-reading snippets per core module
+- Maintenance: `learning/README.md`
 
 ## Deployment
 

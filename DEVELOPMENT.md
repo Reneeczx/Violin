@@ -113,6 +113,7 @@ Start here:
 - [app.js](/d:/Violin/learning/js/app.js)
 - [learn-data.js](/d:/Violin/learning/js/learn-data.js)
 - [learn-view.js](/d:/Violin/learning/js/ui/learn-view.js)
+- [learning/README.md](/d:/Violin/learning/README.md)
 - [learn-data.test.js](/d:/Violin/tests/learn-data.test.js)
 
 Rules:
