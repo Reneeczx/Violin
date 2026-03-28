@@ -231,10 +231,10 @@ tracking.js + state.js
 
 ### 6.9 Learning Mode
 
-- [learning.html](/d:/Violin/learning.html)
-- [learning-app.js](/d:/Violin/js/learning-app.js)
-- [learn-data.js](/d:/Violin/js/learn-data.js)
-- [learn-view.js](/d:/Violin/js/ui/learn-view.js)
+- [index.html](/d:/Violin/learning/index.html)
+- [app.js](/d:/Violin/learning/js/app.js)
+- [learn-data.js](/d:/Violin/learning/js/learn-data.js)
+- [learn-view.js](/d:/Violin/learning/js/ui/learn-view.js)
 
 Responsibilities:
 
@@ -244,8 +244,8 @@ Responsibilities:
 
 Design notes:
 
-- `learning.html` is a separate entry point so the learning experience does not compete with the practice navigation
-- `learning-app.js` boots only the learning UI and avoids the main Router / nav setup
+- `learning/index.html` is a separate subapp entry so the learning experience does not compete with the practice navigation
+- `learning/js/app.js` boots only the learning UI and avoids the main Router / nav setup
 - `learn-data.js` is intentionally pure data so it can be tested without a DOM
 - `learn-view.js` is a thin interactive layer that renders a graph-first single page: module graph on top, current flow below it, then selected-module concepts and code readings
 - The learning UI is intentionally low-load: only the selected module's necessary concepts and one to two code snippets are shown at a time

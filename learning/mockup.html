@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Violin 学习页 Mockup</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="./css/mockup.css">
+</head>
+<body class="learning-mockup-page">
+  <div class="learning-mockup-shell">
+    <header class="learning-mockup-header safe-area-top">
+      <div class="learning-mockup-header__inner">
+        <div class="learning-mockup-header__meta">
+          <div class="learning-mockup-header__eyebrow">Static Mockup</div>
+          <h1 class="learning-mockup-header__title">Violin 学习页结构草案</h1>
+          <p class="learning-mockup-header__summary">
+            这不是最终实现，而是确认学习内容范围的静态稿。核心结构已经按本轮确认收敛成三块：
+            模块关系图、关键概念、核心代码解读。
+          </p>
+        </div>
+        <div class="learning-mockup-header__actions">
+          <a class="btn btn--secondary" href="./index.html">查看当前实现</a>
+          <a class="btn btn--ghost" href="../index.html">返回练习页</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="learning-mockup-main">
+      <section class="card learning-mockup-hero">
+        <div class="learning-mockup-hero__grid">
+          <div>
+            <div class="learning-mockup-section__eyebrow">MVP Scope</div>
+            <h2 class="learning-mockup-hero__title">先看图，再看概念，最后看关键代码</h2>
+            <p class="learning-mockup-hero__copy">
+              单页、低负荷、围绕真实模块展开。默认先回答“模块怎么连起来”，然后只给当前模块最必要的概念和 1 到 2 段关键代码。
+            </p>
+          </div>
+          <div class="learning-mockup-points">
+            <div class="learning-mockup-point">
+              <div class="learning-mockup-point__label">模块关系图</div>
+              <div class="learning-mockup-point__copy">图是视觉中心，同时显示稳定依赖和当前主线。</div>
+            </div>
+            <div class="learning-mockup-point">
+              <div class="learning-mockup-point__label">关键概念</div>
+              <div class="learning-mockup-point__copy">只保留必须懂的术语，并绑定到当前模块。</div>
+            </div>
+            <div class="learning-mockup-point">
+              <div class="learning-mockup-point__label">代码解读</div>
+              <div class="learning-mockup-point__copy">每个模块只讲 1 到 2 段关键代码，不做逐行导读。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card learning-mockup-graph-card">
+        <div class="learning-mockup-card__top">
+          <div>
+            <div class="learning-mockup-section__eyebrow">Module Graph</div>
+            <h2 class="learning-mockup-card__title">模块关系图 + 当前主线</h2>
+          </div>
+          <div class="learning-mockup-card__hint">
+            这里确认的是信息层级：图优先，线条和箭头只服务于理解关系，不抢节点视觉。
+          </div>
+        </div>
+
+        <div class="learning-mockup-toolbar">
+          <span class="learning-mockup-pill learning-mockup-pill--selected">从打开应用到看到今日练习</span>
+          <span class="learning-mockup-pill">点一下示范播放后发生了什么</span>
+          <span class="learning-mockup-pill">勾选完成后数据去哪了</span>
+          <span class="learning-mockup-chip learning-mockup-chip--active">当前模块：应用入口</span>
+        </div>
+
+        <div class="learning-mockup-legend">
+          <div class="learning-mockup-legend__item">
+            <span class="learning-mockup-legend__line learning-mockup-legend__line--base"></span>
+            <span>稳定依赖关系</span>
+          </div>
+          <div class="learning-mockup-legend__item">
+            <span class="learning-mockup-legend__line learning-mockup-legend__line--flow"></span>
+            <span>当前主线</span>
+          </div>
+          <div class="learning-mockup-legend__item">
+            <span class="learning-mockup-legend__dot"></span>
+            <span>当前选中的模块</span>
+          </div>
+        </div>
+
+        <div class="learning-mockup-graph-scroll">
+          <div class="learning-mockup-graph">
+            <svg class="learning-mockup-graph__svg" viewBox="0 0 1180 470" aria-hidden="true">
+              <defs>
+                <marker id="mockup-arrow-base" markerWidth="7" markerHeight="7" refX="6.2" refY="3.5" orient="auto">
+                  <path d="M 0 0 L 7 3.5 L 0 7 z" fill="#bfb09d"></path>
+                </marker>
+                <marker id="mockup-arrow-flow" markerWidth="8" markerHeight="8" refX="7.2" refY="4" orient="auto">
+                  <path d="M 0 0 L 8 4 L 0 8 z" fill="#c47420"></path>
+                </marker>
+              </defs>
+
+              <path class="graph-line graph-line--base" d="M 218 154 C 330 154, 330 155, 432 155" marker-end="url(#mockup-arrow-base)"></path>
+              <path class="graph-line graph-line--base" d="M 218 154 C 332 154, 332 274, 432 274" marker-end="url(#mockup-arrow-base)"></path>
+              <path class="graph-line graph-line--base" d="M 218 154 C 510 154, 510 214, 676 214" marker-end="url(#mockup-arrow-base)"></path>
+              <path class="graph-line graph-line--base" d="M 552 155 C 615 155, 615 214, 676 214" marker-end="url(#mockup-arrow-base)"></path>
+              <path class="graph-line graph-line--base" d="M 552 274 C 614 274, 614 214, 676 214" marker-end="url(#mockup-arrow-base)"></path>
+              <path class="graph-line graph-line--base" d="M 796 214 C 912 214, 912 155, 1012 155" marker-end="url(#mockup-arrow-base)"></path>
+              <path class="graph-line graph-line--base" d="M 796 214 C 920 214, 920 274, 1012 274" marker-end="url(#mockup-arrow-base)"></path>
+
+              <path class="graph-line graph-line--flow" d="M 218 154 C 312 154, 332 155, 432 155" marker-end="url(#mockup-arrow-flow)"></path>
+              <path class="graph-line graph-line--flow" d="M 552 155 C 610 155, 620 274, 432 274" marker-end="url(#mockup-arrow-flow)"></path>
+              <path class="graph-line graph-line--flow" d="M 552 274 C 616 274, 624 214, 676 214" marker-end="url(#mockup-arrow-flow)"></path>
+            </svg>
+
+            <div class="learning-mockup-lane learning-mockup-lane--shell">
+              <div class="learning-mockup-lane__title">入口层</div>
+              <div class="learning-mockup-lane__hint">启动、路由、事件协作</div>
+            </div>
+            <div class="learning-mockup-lane learning-mockup-lane--data">
+              <div class="learning-mockup-lane__title">数据层</div>
+              <div class="learning-mockup-lane__hint">课程数据与计划转换</div>
+            </div>
+            <div class="learning-mockup-lane learning-mockup-lane--ui">
+              <div class="learning-mockup-lane__title">页面层</div>
+              <div class="learning-mockup-lane__hint">页面装配与交互入口</div>
+            </div>
+            <div class="learning-mockup-lane learning-mockup-lane--playback">
+              <div class="learning-mockup-lane__title">播放层</div>
+              <div class="learning-mockup-lane__hint">状态机、时间线、音频调度</div>
+            </div>
+
+            <div class="learning-mockup-node learning-mockup-node--selected" style="left: 44px; top: 98px;">
+              <div class="learning-mockup-node__step">1</div>
+              <div class="learning-mockup-node__title">应用入口</div>
+              <div class="learning-mockup-node__file">js/app.js</div>
+              <div class="learning-mockup-node__copy">程序从这里启动，并把各个页面和路由挂起来。</div>
+            </div>
+            <div class="learning-mockup-node" style="left: 44px; top: 230px;">
+              <div class="learning-mockup-node__title">路由器</div>
+              <div class="learning-mockup-node__file">js/router.js</div>
+              <div class="learning-mockup-node__copy">根据 hash 切换 view。</div>
+            </div>
+            <div class="learning-mockup-node" style="left: 318px; top: 98px;">
+              <div class="learning-mockup-node__step">2</div>
+              <div class="learning-mockup-node__title">课程数据</div>
+              <div class="learning-mockup-node__file">data/lesson-current.js</div>
+              <div class="learning-mockup-node__copy">当前课程内容的原始来源。</div>
+            </div>
+            <div class="learning-mockup-node learning-mockup-node--flow" style="left: 318px; top: 230px;">
+              <div class="learning-mockup-node__step">3</div>
+              <div class="learning-mockup-node__title">练习计划生成</div>
+              <div class="learning-mockup-node__file">js/practice-plan.js</div>
+              <div class="learning-mockup-node__copy">把 lesson 转成今日练习 plan。</div>
+            </div>
+            <div class="learning-mockup-node learning-mockup-node--flow" style="left: 592px; top: 170px;">
+              <div class="learning-mockup-node__step">4</div>
+              <div class="learning-mockup-node__title">首页装配层</div>
+              <div class="learning-mockup-node__file">js/ui/home-view.js</div>
+              <div class="learning-mockup-node__copy">把 plan 渲染成卡片和交互。</div>
+            </div>
+            <div class="learning-mockup-node" style="left: 866px; top: 98px;">
+              <div class="learning-mockup-node__title">播放状态机</div>
+              <div class="learning-mockup-node__file">js/practice-player.js</div>
+              <div class="learning-mockup-node__copy">统一管理示范、节拍器和参考音。</div>
+            </div>
+            <div class="learning-mockup-node" style="left: 866px; top: 230px;">
+              <div class="learning-mockup-node__title">乐谱时间线</div>
+              <div class="learning-mockup-node__file">js/score-utils.js</div>
+              <div class="learning-mockup-node__copy">连接页面展示与播放顺序。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="learning-mockup-detail-grid">
+        <section class="card learning-mockup-concepts">
+          <div class="learning-mockup-card__top">
+            <div>
+              <div class="learning-mockup-section__eyebrow">Concepts For Current Module</div>
+              <h2 class="learning-mockup-card__title">关键概念</h2>
+            </div>
+            <div class="learning-mockup-card__hint">
+              不是完整术语表，而是只给当前模块真正需要的 3 个概念。
+            </div>
+          </div>
+
+          <div class="learning-mockup-concept-list">
+            <article class="learning-mockup-concept">
+              <div class="learning-mockup-concept__term">Entry Point</div>
+              <div class="learning-mockup-concept__plain">程序真正开始执行的入口文件或入口函数。</div>
+              <div class="learning-mockup-concept__why">在这个项目里，`js/app.js` 的 `init()` 就是总入口。</div>
+            </article>
+            <article class="learning-mockup-concept">
+              <div class="learning-mockup-concept__term">Routing</div>
+              <div class="learning-mockup-concept__plain">根据 URL 或 hash 决定当前显示哪个页面。</div>
+              <div class="learning-mockup-concept__why">应用入口不会自己处理页面细节，而是把地址映射注册给路由器。</div>
+            </article>
+            <article class="learning-mockup-concept">
+              <div class="learning-mockup-concept__term">View Container</div>
+              <div class="learning-mockup-concept__plain">先准备好页面容器，再把具体 view 挂进去。</div>
+              <div class="learning-mockup-concept__why">这样做可以让应用壳层负责结构，view 只负责自己的页面内容。</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="card learning-mockup-code">
+          <div class="learning-mockup-card__top">
+            <div>
+              <div class="learning-mockup-section__eyebrow">Core Code Reading</div>
+              <h2 class="learning-mockup-card__title">核心代码解读</h2>
+            </div>
+            <div class="learning-mockup-card__hint">
+              每个模块只讲 1 到 2 段关键代码。这里用“应用入口”做示例。
+            </div>
+          </div>
+
+          <article class="learning-mockup-snippet">
+            <div class="learning-mockup-snippet__meta">
+              <span class="learning-mockup-chip">文件：js/app.js</span>
+              <span class="learning-mockup-chip">片段 1 / 2</span>
+            </div>
+            <h3 class="learning-mockup-snippet__title">统一创建 view 容器</h3>
+            <pre class="learning-mockup-codeblock"><code>const views = {};
+['home', 'plan', 'tuner', 'progress', 'theory'].forEach((name) => {
+  const div = document.createElement('div');
+  div.id = `view-${name}`;
+  div.className = 'view';
+  main.appendChild(div);
+  views[name] = div;
+});</code></pre>
+            <div class="learning-mockup-reading">
+              <div><strong>它在做什么：</strong> 先由应用壳层统一建立所有页面容器。</div>
+              <div><strong>为什么这样设计：</strong> 页面结构由入口层统一管理，后续每个 view 只需要接管自己的 DOM 容器。</div>
+              <div><strong>继续追读：</strong> 看 `HomeView.init(views.home)`，理解容器是如何交给具体模块的。</div>
+            </div>
+          </article>
+
+          <article class="learning-mockup-snippet">
+            <div class="learning-mockup-snippet__meta">
+              <span class="learning-mockup-chip">文件：js/app.js</span>
+              <span class="learning-mockup-chip">片段 2 / 2</span>
+            </div>
+            <h3 class="learning-mockup-snippet__title">用 routeMap 把 URL 接到模块</h3>
+            <pre class="learning-mockup-codeblock"><code>const routeMap = {
+  '/': { view: 'home', module: HomeView, navRoute: '/' },
+  '/plan': { view: 'plan', module: PlanView, navRoute: '/plan' },
+};
+
+Object.entries(routeMap).forEach(([pattern, config]) => {
+  router.register(pattern, { ... });
+});</code></pre>
+            <div class="learning-mockup-reading">
+              <div><strong>它在做什么：</strong> 把地址、页面容器和对应模块收口到一个映射表里。</div>
+              <div><strong>为什么这样设计：</strong> 当页面变多时，入口层仍然只维护一张清楚的路由表，而不是散落很多条件判断。</div>
+              <div><strong>继续追读：</strong> 打开 `js/router.js`，看 `register()` 和 `start()` 如何消费这些配置。</div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

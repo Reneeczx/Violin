@@ -109,10 +109,10 @@ Rules:
 
 Start here:
 
-- [learning.html](/d:/Violin/learning.html)
-- [learning-app.js](/d:/Violin/js/learning-app.js)
-- [learn-data.js](/d:/Violin/js/learn-data.js)
-- [learn-view.js](/d:/Violin/js/ui/learn-view.js)
+- [index.html](/d:/Violin/learning/index.html)
+- [app.js](/d:/Violin/learning/js/app.js)
+- [learn-data.js](/d:/Violin/learning/js/learn-data.js)
+- [learn-view.js](/d:/Violin/learning/js/ui/learn-view.js)
 - [learn-data.test.js](/d:/Violin/tests/learn-data.test.js)
 
 Rules:

@@ -31,12 +31,12 @@ test('buildWarningMarkup includes the exact local preview instructions', () => {
   const markup = bootstrap.buildWarningMarkup({
     pageName: '学习页',
     command: 'py -m http.server 8124 --bind 127.0.0.1',
-    previewUrl: 'http://127.0.0.1:8124/learning.html',
+    previewUrl: 'http://127.0.0.1:8124/learning/',
   });
 
   assert.match(markup, /学习页 不能直接双击打开/);
   assert.match(markup, /py -m http\.server 8124 --bind 127\.0\.0\.1/);
-  assert.match(markup, /http:\/\/127\.0\.0\.1:8124\/learning\.html/);
+  assert.match(markup, /http:\/\/127\.0\.0\.1:8124\/learning\//);
 });
 
 test('start renders a warning instead of loading the module on file protocol', () => {
@@ -70,10 +70,10 @@ test('start renders a warning instead of loading the module on file protocol', (
 
   const result = bootstrap.start({
     containerId: 'learning-main',
-    moduleSrc: 'js/learning-app.js?v=20260328',
+    moduleSrc: 'js/app.js?v=20260328',
     pageName: '学习页',
     command: 'py -m http.server 8124 --bind 127.0.0.1',
-    previewUrl: 'http://127.0.0.1:8124/learning.html',
+    previewUrl: 'http://127.0.0.1:8124/learning/',
   }, env);
 
   assert.equal(result.mode, 'warning');

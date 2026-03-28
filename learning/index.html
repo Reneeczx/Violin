@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#E8913A">
+  <title>Violin 学习页</title>
+  <link rel="icon" href="../favicon.ico">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="./css/learning.css">
+</head>
+<body class="learning-page">
+  <div class="learning-page__shell">
+    <header class="learning-page__header safe-area-top">
+      <div class="learning-page__header-inner">
+        <div class="learning-page__eyebrow">Visual Architecture Guide</div>
+        <h1 class="learning-page__title" id="learning-title">Violin 学习页</h1>
+        <p class="learning-page__summary">
+          先看模块关系和当前主线，再围绕当前模块学习最必要的关键概念与核心代码。
+        </p>
+        <div class="learning-page__actions">
+          <a class="btn btn--secondary" href="../index.html">返回练习应用</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="main learning-main" id="learning-main"></main>
+  </div>
+
+  <script src="../js/page-bootstrap.js?v=20260328"></script>
+  <script>
+    window.PageBootstrap.start({
+      containerId: 'learning-main',
+      moduleSrc: 'js/app.js?v=20260328',
+      pageName: '学习页',
+      command: 'py -m http.server 8124 --bind 127.0.0.1',
+      previewUrl: 'http://127.0.0.1:8124/learning/',
+    });
+  </script>
+</body>
+</html>

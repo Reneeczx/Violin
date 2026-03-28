@@ -72,11 +72,11 @@ node --check js/app.js
 node --check js/audio-engine.js
 ```
 
-## Standalone Learning Page
+## Learning Subapp
 
-- Preview: `http://127.0.0.1:8124/learning.html`
-- Entry files: `learning.html`, `js/learning-app.js`, `js/learn-data.js`, `js/ui/learn-view.js`, `css/learning.css`
-- Scope: kept separate from the main practice app shell and bottom navigation
+- Preview: `http://127.0.0.1:8124/learning/`
+- Entry files: `learning/index.html`, `learning/js/app.js`, `learning/js/learn-data.js`, `learning/js/ui/learn-view.js`, `learning/css/learning.css`
+- Scope: isolated as a repo-local subapp, separate from the main practice app shell and bottom navigation
 - Includes: dependency graph with current flow highlight, focused concepts for the selected module, and one to two code-reading snippets per core module
 
 ## Deployment

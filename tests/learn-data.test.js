@@ -9,7 +9,7 @@ import {
   buildLearningIndex,
   buildLearningRelationships,
   getLearningDefaults,
-} from '../js/learn-data.js';
+} from '../learning/js/learn-data.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

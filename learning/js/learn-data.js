@@ -767,10 +767,10 @@ export const LEARNING_CONTENT = {
       estimate: '20 分钟',
       goal: '通过给学习模式加内容，顺便练一次结构化前端改动。',
       focusModuleIds: ['app-shell'],
-      filePaths: ['js/learn-data.js', 'js/ui/learn-view.js', 'tests/learn-data.test.js'],
+      filePaths: ['learning/js/learn-data.js', 'learning/js/ui/learn-view.js', 'tests/learn-data.test.js'],
       steps: [
         '在 learn-data.js 中新增一个术语、模块或练习任务。',
-        '刷新 learning.html，确认新的卡片或按钮出现。',
+        '刷新 learning/index.html，确认新的卡片或按钮出现。',
         '运行 learn-data 测试，确保引用关系没有断。',
       ],
       verify: '学习模式能展示新内容，且 learn-data 测试通过。',
