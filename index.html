@@ -18,6 +18,11 @@
   <link rel="stylesheet" href="css/components.css">
 
   <script src="data/lesson-current.js"></script>
+  <script>
+    if (window.CURRENT_LESSON && !window.EMBEDDED_CURRENT_LESSON) {
+      window.EMBEDDED_CURRENT_LESSON = JSON.parse(JSON.stringify(window.CURRENT_LESSON));
+    }
+  </script>
 </head>
 <body>
   <div id="app">

@@ -5,7 +5,7 @@
 - Product: `Violin`
 - Doc type: `Tech Spec`
 - Status: `Active`
-- Last updated: `2026-03-28`
+- Last updated: `2026-03-30`
 - Primary owner: `Engineering / Builder`
 - Related docs:
   - [README.md](/d:/Violin/README.md)
@@ -411,6 +411,47 @@ node --test --experimental-default-type=module tests/*.test.js
 - 当前课程数据是单文件静态配置，不适合长期扩展到多课程
 - 浏览器端音频与录音能力受设备环境影响明显
 - 本地存储缺少跨设备同步
+
+## Archived Weeks And Staff Notation
+
+### Published Week Packages
+
+- [lesson-current.js](/d:/Violin/data/lesson-current.js) remains the embedded fallback lesson for the active week.
+- [week-package-store.js](/d:/Violin/js/week-package-store.js) is the runtime source of truth for locally authored week packages stored in `localStorage`.
+- `resolveRuntimeLesson()` selects the published package for the current Monday-first week when it exists; otherwise the app falls back to the embedded `window.CURRENT_LESSON`.
+- [lesson-catalog.js](/d:/Violin/js/lesson-catalog.js) builds the plan-page catalog from published packages first, then injects:
+  - the embedded current lesson when no published current-week package exists
+  - the previous real lesson as a readonly baseline when it is still needed for history continuity
+- [plan-view.js](/d:/Violin/js/ui/plan-view.js) renders the horizontal published-week selector and a read-only historical view. Tracking still comes from [tracking.js](/d:/Violin/js/tracking.js) and [state.js](/d:/Violin/js/state.js).
+- [lesson-archive.js](/d:/Violin/data/lesson-archive.js) is no longer part of the runtime history path. It is retained only as seed/reference content for maintenance or migration work.
+- Prep fixtures such as `Prep Week` / `准备周` are explicitly excluded from the embedded baseline path.
+
+### Weekly Authoring Console
+
+- [author/index.html](/d:/Violin/author/index.html) is a separate builder-facing subapp. It does not participate in the student router or bottom navigation.
+- [author-view.js](/d:/Violin/author/js/ui/author-view.js) implements the local authoring state machine:
+  - `draft-shell`
+  - `ready-for-export`
+  - `draft-imported`
+  - `published`
+- [week-package-utils.js](/d:/Violin/js/week-package-utils.js) defines the import contract, validation rules, auto learning-profile heuristics, coaching-focus suggestions, manifest export, and Codex prompt export.
+- [source-asset-store.js](/d:/Violin/js/source-asset-store.js) stores uploaded PDF/image blobs in IndexedDB while week-package metadata remains in `localStorage`.
+- v1 generation is provider-based but intentionally fixed to `external_codex_manual`: export context from the authoring console, review the auto-generated learning profile plus coaching focus, generate `week-package.json` in Codex IDE, then import and publish locally.
+- The student app consumes only `generatedLesson` from published packages and does not care whether the package came from manual authoring, Codex IDE, or a future provider.
+
+### Staff Notation Pipeline
+
+- [score-display.js](/d:/Violin/js/ui/score-display.js) is the coordination layer for notation mode, playback highlighting, and inline explainers.
+- [staff-notation.js](/d:/Violin/js/staff-notation.js) builds a simplified staff model from existing `measures`, `timeSignature`, and `bpm` data.
+- [staff-display.js](/d:/Violin/js/ui/staff-display.js) renders the staff model as SVG, including clef, time signature, tempo, measures, notes, rests, and beat markers.
+- The original beginner notation remains intact; staff notation is an alternate learning-oriented view rather than a replacement.
+- `practice:beat` and `practice:notechange` continue to be the runtime signals that drive both notation modes.
+
+### Theory Integration
+
+- [music-theory.js](/d:/Violin/js/music-theory.js) now serves both the theory route and the inline staff explainer.
+- Staff symbols map to focused topics such as `staff-basics`, `note-reading`, `rests`, `tempo`, and `time-signature`.
+- The explainer stays in-context under the score, with an optional deep link into `#/theory/:topic`.
 
 ## 15. Future Evolution Paths
 

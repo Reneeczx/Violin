@@ -34,6 +34,23 @@ export function getDayNumber(lessonDay, today = new Date()) {
 export function generateDailyPlan(lesson, dayNumber) {
   const dayKey = `day${dayNumber}`;
   const totalTarget = 12; // minutes target
+  const dayProgressions = (lesson.exercises || []).map((exercise) => exercise.progression?.[dayKey] || {});
+  const hasActiveExercise = dayProgressions.some((progression) => progression.status !== 'inactive');
+  const dayStatus = hasActiveExercise
+    ? (dayProgressions.some((progression) => progression.status === 'catchup') ? 'catchup' : 'planned')
+    : 'inactive';
+
+  if (dayStatus === 'inactive') {
+    return {
+      dayNumber,
+      dayStatus,
+      theme: '计划发布前',
+      totalMinutes: 0,
+      sections: [],
+      lessonTitle: lesson.title,
+      teacherNotes: lesson.teacherNotes,
+    };
+  }
 
   const sections = [];
 
@@ -64,6 +81,7 @@ export function generateDailyPlan(lesson, dayNumber) {
       id: exercise.id,
       type: 'exercise',
       exerciseType: exercise.type,
+      planStatus: progression.status || dayStatus,
       title: exercise.title,
       titleEn: exercise.titleEn,
       icon: exercise.type === 'piece' ? '🎶' : '🎵',
@@ -110,6 +128,7 @@ export function generateDailyPlan(lesson, dayNumber) {
 
   return {
     dayNumber,
+    dayStatus,
     theme: DAY_THEMES[dayNumber] || '',
     totalMinutes,
     sections,
@@ -143,6 +162,7 @@ export function getWeekOverview(lesson) {
     days.push({
       dayNumber: d,
       date: dateObj,
+      dayStatus: plan.dayStatus || 'planned',
       theme: plan.theme,
       totalMinutes: plan.totalMinutes,
       sectionCount: plan.sections.length,

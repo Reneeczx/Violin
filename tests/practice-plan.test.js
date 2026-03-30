@@ -25,3 +25,43 @@ test('day 3 open string plan keeps the recommended bpm for the card badge', () =
   assert.equal(openStrings.recommendedBpm, 55);
   assert.equal(openStrings.bpm, 55);
 });
+
+test('inactive days produce an empty plan before a late-published week starts', () => {
+  const lateLesson = {
+    ...lesson,
+    exercises: lesson.exercises.map((exercise) => ({
+      ...exercise,
+      progression: {
+        ...exercise.progression,
+        day1: { ...exercise.progression.day1, status: 'inactive' },
+        day2: { ...exercise.progression.day2, status: 'inactive' },
+        day3: { ...exercise.progression.day3, status: 'catchup' },
+      },
+    })),
+  };
+
+  const plan = generateDailyPlan(lateLesson, 1);
+
+  assert.equal(plan.dayStatus, 'inactive');
+  assert.equal(plan.totalMinutes, 0);
+  assert.deepEqual(plan.sections, []);
+});
+
+test('catchup days stay executable and keep the day status', () => {
+  const lateLesson = {
+    ...lesson,
+    exercises: lesson.exercises.map((exercise) => ({
+      ...exercise,
+      progression: {
+        ...exercise.progression,
+        day3: { ...exercise.progression.day3, status: 'catchup' },
+      },
+    })),
+  };
+
+  const plan = generateDailyPlan(lateLesson, 3);
+
+  assert.equal(plan.dayStatus, 'catchup');
+  assert.ok(plan.sections.length > 0);
+  assert.ok(plan.sections.some((section) => section.planStatus === 'catchup'));
+});

@@ -125,6 +125,51 @@ Rules:
 - Limit code reading to one or two real snippets per module to avoid beginner overload
 - Run `node --test --experimental-default-type=module tests/*.test.js` after changing module links, task files, or defaults
 
+### Update Weekly Authoring And Published History
+
+Start here:
+
+- [lesson-current.js](/d:/Violin/data/lesson-current.js)
+- [week-package-store.js](/d:/Violin/js/week-package-store.js)
+- [week-package-utils.js](/d:/Violin/js/week-package-utils.js)
+- [source-asset-store.js](/d:/Violin/js/source-asset-store.js)
+- [lesson-catalog.js](/d:/Violin/js/lesson-catalog.js)
+- [plan-view.js](/d:/Violin/js/ui/plan-view.js)
+- [author/index.html](/d:/Violin/author/index.html)
+- [author-view.js](/d:/Violin/author/js/ui/author-view.js)
+- [tracking.js](/d:/Violin/js/tracking.js)
+- [state.js](/d:/Violin/js/state.js)
+
+Rules:
+
+- Keep `window.CURRENT_LESSON` as the embedded fallback for the active week
+- Runtime history should primarily come from `status: published` week packages, with one allowed exception: a readonly embedded baseline for the most recent real lesson week
+- The authoring flow is `draft shell -> review auto learning profile and coaching focus -> export manifest/prompt -> Codex IDE generates JSON -> import -> preview -> publish`
+- `lesson-archive.js` is seed/reference data only; do not treat it as the student-facing history source
+- The embedded baseline must never surface prep weeks such as `Prep Week` or `准备周`
+- Historical weeks stay read-only in the plan page; do not add editing, recording, or completion toggles there
+- If you change week-package loading or schema, update [index.html](/d:/Violin/index.html), [sw.js](/d:/Violin/sw.js), and the `week-package-*` tests together
+- Run `node --test --experimental-default-type=module tests/*.test.js` after changing authoring flow, package schema, or published history resolution
+
+### Update Staff Notation
+
+Start here:
+
+- [staff-notation.js](/d:/Violin/js/staff-notation.js)
+- [staff-display.js](/d:/Violin/js/ui/staff-display.js)
+- [score-display.js](/d:/Violin/js/ui/score-display.js)
+- [home-view.js](/d:/Violin/js/ui/home-view.js)
+- [music-theory.js](/d:/Violin/js/music-theory.js)
+- [components.css](/d:/Violin/css/components.css)
+
+Rules:
+
+- Keep the beginner notation as the default score view
+- Treat staff notation as a generated learning aid, not an exact engraving workflow
+- Route all score-mode switching through [score-display.js](/d:/Violin/js/ui/score-display.js) so playback highlighting stays in one place
+- New clickable staff symbols must map to a theory topic or an inline explainer in [music-theory.js](/d:/Violin/js/music-theory.js)
+- Run `node --test --experimental-default-type=module tests/*.test.js` after changing archive data, notation rendering, or theory mappings
+
 ## 5. iPad / iPhone Verification
 
 每次影响音频、PWA 或触摸交互的改动，都建议在真机确认：

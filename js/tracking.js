@@ -91,6 +91,13 @@ const Tracking = {
   /**
    * Get completed day numbers for a week.
    */
+  hasWeekRecord(weekOf) {
+    return State.hasWeekTracking(weekOf);
+  },
+
+  /**
+   * Get completed day numbers for a week.
+   */
   getCompletedDays(weekOf) {
     const data = State.getWeekTracking(weekOf);
     return Object.keys(data.days)

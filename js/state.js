@@ -19,6 +19,15 @@ const State = {
     }
   },
 
+  has(key) {
+    try {
+      return localStorage.getItem(PREFIX + key) != null;
+    } catch (e) {
+      console.error('State.has error:', e);
+      return false;
+    }
+  },
+
   remove(key) {
     localStorage.removeItem(PREFIX + key);
   },
@@ -29,6 +38,10 @@ const State = {
       weekOf,
       days: {}
     });
+  },
+
+  hasWeekTracking(weekOf) {
+    return this.has(`tracking_${weekOf}`);
   },
 
   saveWeekTracking(weekOf, data) {
