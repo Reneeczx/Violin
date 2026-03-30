@@ -43,6 +43,12 @@ function upsertPackage(nextPackage) {
   return cloneJson(nextPackage);
 }
 
+function assertEditableWeekPackage(existingPackage, weekOf) {
+  if (existingPackage?.status === 'published') {
+    throw new Error(`Week package ${weekOf} is already published and read-only`);
+  }
+}
+
 function deriveAuthoringState(weekPackage) {
   if (weekPackage.status === 'published') {
     return 'published';
@@ -208,10 +214,11 @@ export function saveDraftShell({
   }
 
   const existing = getWeekPackage(weekOf) || {};
+  assertEditableWeekPackage(existing, weekOf);
   const nextPackage = {
     schemaVersion: SCHEMA_VERSION,
     weekOf,
-    status: existing.status === 'published' ? 'published' : 'draft',
+    status: 'draft',
     planKind,
     lessonDay: 1,
     publishedAt: existing.publishedAt || null,
@@ -240,6 +247,7 @@ export function importWeekPackage(importedPackage) {
   }
 
   const existing = getWeekPackage(importedPackage.weekOf) || {};
+  assertEditableWeekPackage(existing, importedPackage.weekOf);
   const publishedFromDayNumber = clampDayNumber(
     importedPackage.publishedFromDayNumber ?? existing.publishedFromDayNumber ?? 1,
   );

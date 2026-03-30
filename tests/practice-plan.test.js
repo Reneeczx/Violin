@@ -65,3 +65,22 @@ test('catchup days stay executable and keep the day status', () => {
   assert.ok(plan.sections.length > 0);
   assert.ok(plan.sections.some((section) => section.planStatus === 'catchup'));
 });
+
+test('missing estimatedMinutes falls back to safe runtime defaults instead of producing invalid durations', () => {
+  const importedLesson = {
+    ...lesson,
+    exercises: lesson.exercises.map((exercise) => {
+      const { estimatedMinutes, ...rest } = exercise;
+      return rest;
+    }),
+  };
+
+  const plan = generateDailyPlan(importedLesson, 3);
+  const exerciseSections = plan.sections.filter((section) => section.type === 'exercise');
+
+  assert.ok(exerciseSections.length > 0);
+  exerciseSections.forEach((section) => {
+    assert.equal(Number.isFinite(section.durationMinutes), true);
+    assert.ok(section.durationMinutes >= 2);
+  });
+});

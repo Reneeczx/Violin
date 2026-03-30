@@ -101,3 +101,40 @@ test('buildPublishedLessonHistory injects the embedded previous lesson as a read
   assert.equal(history[0].historySource, 'embedded-baseline');
   assert.equal(history[0].isCurrent, false);
 });
+
+test('published week packages cannot be overwritten by a new draft shell or import', () => {
+  localStorage.clear();
+
+  store.saveDraftShell({
+    weekOf: '2026-03-30',
+    planKind: 'lesson',
+    publishedFromDayNumber: 1,
+    teacherBrief: 'original published week',
+    sourceAssets: [],
+  });
+  store.importWeekPackage(buildDraftPackage({
+    teacherBrief: 'original published week',
+  }));
+  store.publishWeekPackage('2026-03-30');
+
+  assert.throws(
+    () => store.saveDraftShell({
+      weekOf: '2026-03-30',
+      planKind: 'lesson',
+      publishedFromDayNumber: 1,
+      teacherBrief: 'mutated after publish',
+      sourceAssets: [],
+    }),
+    /read-only/,
+  );
+  assert.throws(
+    () => store.importWeekPackage(buildDraftPackage({
+      teacherBrief: 'mutated after publish',
+    })),
+    /read-only/,
+  );
+
+  const publishedPackage = store.getWeekPackage('2026-03-30');
+  assert.equal(publishedPackage.status, 'published');
+  assert.equal(publishedPackage.teacherBrief, 'original published week');
+});

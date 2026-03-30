@@ -88,6 +88,7 @@ node --check js/audio-engine.js
 - Entry files: `author/index.html`, `author/js/app.js`, `author/js/ui/author-view.js`, `author/css/author.css`
 - Scope: isolated builder-facing weekly authoring flow; not linked from the student bottom navigation
 - Workflow: save a draft shell, export `week-manifest.json` and `codex-prompt.md`, generate `week-package.json` in Codex IDE, then import, preview, and publish locally
+- Published week packages are readonly in place; to prepare another revision or another week, change `weekOf` and save a new draft shell
 - Exported context now includes planner role, auto-generated learning profile, suggested coaching focus, confirmed weekly focus, runtime practice budget, carry-over context, and JSON self-check guidance
 - Storage:
   - week packages in `localStorage` via [week-package-store.js](/d:/Violin/js/week-package-store.js)

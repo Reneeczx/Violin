@@ -165,6 +165,10 @@ function renderDraftShellCard(currentPackage) {
     ? '复习周允许没有新原谱；导出的 manifest 会自动带上最近已发布周和完成摘要。'
     : '正常上课周建议至少上传一份 PDF 或图片原谱，再导出给 Codex。'));
 
+  if (currentPackage.status === 'published') {
+    body.appendChild(createTip('已发布周包现在是只读的。若要继续编辑，请先把“周一日期”改成新的 weekOf，再保存成新草案。', '🔒'));
+  }
+
   if (currentPackage.sourceAssets?.length) {
     body.appendChild(renderAssets(currentPackage.sourceAssets));
   }
@@ -467,11 +471,17 @@ function renderSidebar(currentPackage, allPackages) {
 }
 
 async function handleSaveDraft(currentPackage) {
-  return persistDraft(currentPackage, {
-    flashType: 'success',
-    flashMessage: '草案壳已保存。现在可以导出给 Codex。',
-    renderAfter: true,
-  });
+  try {
+    return await persistDraft(currentPackage, {
+      flashType: 'success',
+      flashMessage: '草案壳已保存。现在可以导出给 Codex。',
+      renderAfter: true,
+    });
+  } catch (error) {
+    setFlash('error', error.message);
+    render();
+    return currentPackage;
+  }
 }
 
 async function persistDraft(currentPackage, options = {}) {
@@ -483,6 +493,10 @@ async function persistDraft(currentPackage, options = {}) {
   const manualCoachingFocus = parseLineList(document.getElementById('manual-coaching-focus')?.value || '');
   const fileInput = form.elements.sourceFiles;
   const sameWeek = weekOf === currentPackage.weekOf;
+
+  if (sameWeek && currentPackage.status === 'published') {
+    throw new Error('已发布周包为只读。请先改成新的周一日期，再另存为新草案。');
+  }
 
   let sourceAssets = sameWeek ? (currentPackage.sourceAssets || []) : [];
   if (fileInput.files?.length) {
@@ -513,11 +527,18 @@ async function persistDraft(currentPackage, options = {}) {
 }
 
 async function handleDownloadManifest(currentPackage) {
-  const savedPackage = await persistDraft(currentPackage, {
-    flashType: 'success',
-    flashMessage: 'week-manifest.json 已按当前设置重新生成并下载。',
-    renderAfter: false,
-  });
+  let savedPackage;
+  try {
+    savedPackage = await persistDraft(currentPackage, {
+      flashType: 'success',
+      flashMessage: 'week-manifest.json 已按当前设置重新生成并下载。',
+      renderAfter: false,
+    });
+  } catch (error) {
+    setFlash('error', error.message);
+    render();
+    return;
+  }
 
   const nextPackage = getWeekPackage(savedPackage.weekOf) || savedPackage;
   if (!nextPackage) {
@@ -532,11 +553,18 @@ async function handleDownloadManifest(currentPackage) {
 }
 
 async function handleDownloadPrompt(currentPackage) {
-  const savedPackage = await persistDraft(currentPackage, {
-    flashType: 'success',
-    flashMessage: 'codex-prompt.md 已按当前设置重新生成并下载。',
-    renderAfter: false,
-  });
+  let savedPackage;
+  try {
+    savedPackage = await persistDraft(currentPackage, {
+      flashType: 'success',
+      flashMessage: 'codex-prompt.md 已按当前设置重新生成并下载。',
+      renderAfter: false,
+    });
+  } catch (error) {
+    setFlash('error', error.message);
+    render();
+    return;
+  }
 
   const nextPackage = getWeekPackage(savedPackage.weekOf) || savedPackage;
   if (!nextPackage) {
@@ -587,10 +615,15 @@ async function handleImport(expectedWeekOf) {
     setFlash('success', 'JSON 已导入。请先预览，再决定是否发布。');
   }
 
-  importWeekPackage(parsed);
-  _selectedWeekOf = parsed.weekOf;
-  _importText = '';
-  render();
+  try {
+    importWeekPackage(parsed);
+    _selectedWeekOf = parsed.weekOf;
+    _importText = '';
+    render();
+  } catch (error) {
+    setFlash('error', error.message);
+    render();
+  }
 }
 
 function handlePublish(weekOf) {

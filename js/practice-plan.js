@@ -17,6 +17,15 @@ const DAY_THEMES = [
   '最终复习，准备上课',
 ];
 
+function getExerciseEstimatedMinutes(exercise) {
+  const numericValue = Number(exercise?.estimatedMinutes);
+  if (Number.isFinite(numericValue) && numericValue > 0) {
+    return numericValue;
+  }
+
+  return exercise?.type === 'piece' ? 5 : 3;
+}
+
 /**
  * Calculate which practice day (1-7) today is,
  * based on the lesson day of week.
@@ -70,10 +79,10 @@ export function generateDailyPlan(lesson, dayNumber) {
 
   // 2. Exercises from lesson
   const exerciseMinutesPool = totalTarget - 3; // minus warmup(2) + cooldown(1)
-  const totalEstimated = lesson.exercises.reduce((sum, ex) => sum + ex.estimatedMinutes, 0);
+  const totalEstimated = lesson.exercises.reduce((sum, ex) => sum + getExerciseEstimatedMinutes(ex), 0);
 
   lesson.exercises.forEach(exercise => {
-    const ratio = exercise.estimatedMinutes / totalEstimated;
+    const ratio = getExerciseEstimatedMinutes(exercise) / totalEstimated;
     const minutes = Math.round(ratio * exerciseMinutesPool);
     const progression = exercise.progression?.[dayKey] || {};
 

@@ -66,6 +66,7 @@ test('validateWeekPackage rejects missing runtime fields', () => {
 
   assert.ok(errors.some((error) => error.includes('progression.day1')));
   assert.ok(errors.some((error) => error.includes('.measures')));
+  assert.ok(errors.some((error) => error.includes('.estimatedMinutes')));
 });
 
 test('buildWeekManifest includes recent published context and review candidates', () => {
@@ -145,4 +146,55 @@ test('buildWeekManifest uses builder-adjusted coaching focus when provided', () 
   const prompt = buildCodexPrompt(manifest);
   assert.match(prompt, /只保留一个重点：休止要先数清楚/);
   assert.match(prompt, /换弦时先慢下来/);
+});
+
+test('buildWeekManifest excludes inactive days from late-published week completion rate', async () => {
+  localStorage.clear();
+
+  const State = (await import('../js/state.js')).default;
+
+  saveDraftShell({
+    weekOf: '2026-03-23',
+    planKind: 'lesson',
+    teacherBrief: '周三才开始执行',
+    sourceAssets: [],
+  });
+  importWeekPackage(buildPackage({
+    weekOf: '2026-03-23',
+    publishedFromDayNumber: 3,
+    generatedLesson: {
+      ...lesson,
+      weekOf: '2026-03-23',
+      id: 'lesson-001',
+      title: '第一课 - 认识空弦',
+      exercises: lesson.exercises.map((exercise) => ({
+        ...exercise,
+        progression: {
+          ...exercise.progression,
+          day1: { ...exercise.progression.day1, status: 'inactive' },
+          day2: { ...exercise.progression.day2, status: 'inactive' },
+        },
+      })),
+    },
+  }));
+  publishWeekPackage('2026-03-23');
+
+  State.saveWeekTracking('2026-03-23', {
+    weekOf: '2026-03-23',
+    days: {
+      3: {
+        completedAt: new Date('2026-03-25T09:00:00.000Z').toISOString(),
+        sections: {},
+        totalSeconds: 300,
+      },
+    },
+  });
+
+  const manifest = buildWeekManifest(buildPackage());
+
+  assert.equal(manifest.recentPublishedWeeks[0].publishedFromDayNumber, 3);
+  assert.equal(manifest.recentPublishedWeeks[0].activeDayCount, 5);
+  assert.equal(manifest.recentPublishedWeeks[0].completionRate, 0.2);
+  assert.equal(manifest.learningProfile.averageCompletionRatePercent, 20);
+  assert.match(buildCodexPrompt(manifest), /completedDays=1\/5/);
 });

@@ -145,6 +145,7 @@ Rules:
 - Keep `window.CURRENT_LESSON` as the embedded fallback for the active week
 - Runtime history should primarily come from `status: published` week packages, with one allowed exception: a readonly embedded baseline for the most recent real lesson week
 - The authoring flow is `draft shell -> review auto learning profile and coaching focus -> export manifest/prompt -> Codex IDE generates JSON -> import -> preview -> publish`
+- Once a week package is published, treat it as readonly. Do not mutate it through save/import paths; create a new draft under a new `weekOf` instead
 - `lesson-archive.js` is seed/reference data only; do not treat it as the student-facing history source
 - The embedded baseline must never surface prep weeks such as `Prep Week` or `准备周`
 - Historical weeks stay read-only in the plan page; do not add editing, recording, or completion toggles there

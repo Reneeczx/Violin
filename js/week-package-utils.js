@@ -185,9 +185,14 @@ function buildWeekSummary(lessonEntry) {
   const completedDays = Object.keys(tracking.days || {})
     .filter((dayNumber) => tracking.days[dayNumber]?.completedAt)
     .map(Number);
-  const dailyMinutes = getWeekOverview(lessonEntry)
+  const activeDays = getWeekOverview(lessonEntry)
     .filter((day) => day.dayStatus !== 'inactive' && day.totalMinutes > 0)
-    .map((day) => day.totalMinutes);
+    .map((day) => ({
+      dayNumber: day.dayNumber,
+      totalMinutes: day.totalMinutes,
+    }));
+  const activeDayNumbers = activeDays.map((day) => day.dayNumber);
+  const completedActiveDays = completedDays.filter((dayNumber) => activeDayNumbers.includes(dayNumber));
 
   return {
     weekOf: lessonEntry.weekOf,
@@ -196,8 +201,12 @@ function buildWeekSummary(lessonEntry) {
     planKind: lessonEntry.planKind || 'lesson',
     publishedFromDayNumber: lessonEntry.publishedFromDayNumber || 1,
     completedDays,
-    completionRate: Number((completedDays.length / 7).toFixed(2)),
-    dailyMinutes,
+    completedActiveDays,
+    activeDayCount: activeDayNumbers.length,
+    completionRate: activeDayNumbers.length
+      ? Number((completedActiveDays.length / activeDayNumbers.length).toFixed(2))
+      : 0,
+    dailyMinutes: activeDays.map((day) => day.totalMinutes),
     exerciseTitles: (lessonEntry.exercises || []).map((exercise) => ({
       id: exercise.id,
       title: exercise.title,
@@ -684,7 +693,7 @@ function formatWeekSummaries(weekSummaries) {
     const exerciseLabels = weekSummary.exerciseTitles
       .map((exercise) => `${exercise.title} (${clampPercentage(exercise.completionRate)}%)`)
       .join(', ');
-    return `- ${weekSummary.weekOf} | ${weekSummary.title} | source=${weekSummary.sourceKind} | completedDays=${weekSummary.completedDays.length}/7 | exercises=${exerciseLabels}`;
+    return `- ${weekSummary.weekOf} | ${weekSummary.title} | source=${weekSummary.sourceKind} | completedDays=${weekSummary.completedActiveDays.length}/${weekSummary.activeDayCount || 7} | exercises=${exerciseLabels}`;
   }).join('\n');
 }
 
@@ -775,6 +784,9 @@ export function validateWeekPackage(weekPackage) {
     }
     if (!exercise.title) {
       errors.push(`${prefix}.title is required`);
+    }
+    if (!Number.isFinite(Number(exercise.estimatedMinutes)) || Number(exercise.estimatedMinutes) <= 0) {
+      errors.push(`${prefix}.estimatedMinutes must be a positive number`);
     }
     if (!exercise.progression || typeof exercise.progression !== 'object') {
       errors.push(`${prefix}.progression is required`);

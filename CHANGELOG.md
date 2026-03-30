@@ -16,6 +16,12 @@ All notable changes to this project will be documented in this file.
 - Updated weekly planning and score display flows to support late-published weeks, review-week authoring, and score-mode switching between beginner cells and staff notation
 - Expanded authoring, architecture, requirements, and development docs to cover weekly publishing, local asset handling, and practice-history behavior
 
+### Fixed
+
+- Prevented published week packages from being silently edited in place through the authoring draft and import paths
+- Hardened imported lesson planning so missing `estimatedMinutes` no longer produces invalid section durations
+- Corrected late-published week completion rates so inactive pre-release days do not drag down the inferred learning profile
+
 ## [0.1.1.4] - 2026-03-27
 
 ### Changed
