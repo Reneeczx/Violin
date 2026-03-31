@@ -6,10 +6,22 @@ import * as TunerView from './ui/tuner-view.js';
 import * as ProgressView from './ui/progress-view.js';
 import * as TheoryView from './ui/theory-view.js';
 import Recorder from './recorder.js';
+import { resolveRuntimeLesson, resolveRuntimeWeekPackage } from './week-package-store.js';
 
 const router = new Router();
 
 function init() {
+  if (!window.EMBEDDED_CURRENT_LESSON && window.CURRENT_LESSON) {
+    window.EMBEDDED_CURRENT_LESSON = JSON.parse(JSON.stringify(window.CURRENT_LESSON));
+  }
+
+  const runtimeLesson = resolveRuntimeLesson(window.CURRENT_LESSON);
+  const runtimeWeekPackage = resolveRuntimeWeekPackage();
+  if (runtimeLesson) {
+    window.CURRENT_LESSON = runtimeLesson;
+  }
+  window.CURRENT_WEEK_PACKAGE = runtimeWeekPackage;
+
   const nav = document.getElementById('nav');
   renderNav(nav);
 
@@ -49,7 +61,7 @@ function init() {
         const titles = {
           home: '今日练习',
           plan: '本周计划',
-          tuner: '调弦助手',
+          tuner: '调音助手',
           progress: '我的进度',
           theory: '基础乐理',
         };

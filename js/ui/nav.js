@@ -1,7 +1,7 @@
 const TABS = [
-  { id: '/', icon: '🎵', label: '今日' },
+  { id: '/', icon: '🎻', label: '今日' },
   { id: '/plan', icon: '🗓️', label: '本周' },
-  { id: '/tuner', icon: '🎻', label: '调弦' },
+  { id: '/tuner', icon: '🎼', label: '调音' },
   { id: '/progress', icon: '⭐', label: '进度' },
 ];
 

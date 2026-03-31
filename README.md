@@ -33,6 +33,7 @@
 ## Project Structure
 
 ```text
+author/               weekly authoring subapp
 css/                  UI 样式
 data/                 当前课程数据
 icons/                PWA 图标
@@ -43,6 +44,7 @@ js/
   practice-plan.js    每日/每周练习计划生成
   recorder.js         录音和本地存储
 tests/                单元测试
+learning/             interactive learning subapp
 ```
 
 ## Local Development
@@ -80,6 +82,19 @@ node --check js/audio-engine.js
 - Includes: dependency graph with current flow highlight, focused concepts for the selected module, and one to two code-reading snippets per core module
 - Maintenance: `learning/README.md`
 
+## Authoring Subapp
+
+- Preview: `http://127.0.0.1:8124/author/`
+- Entry files: `author/index.html`, `author/js/app.js`, `author/js/ui/author-view.js`, `author/css/author.css`
+- Scope: isolated builder-facing weekly authoring flow; not linked from the student bottom navigation
+- Workflow: save a draft shell, export `week-manifest.json` and `codex-prompt.md`, generate `week-package.json` in Codex IDE, then import, preview, and publish locally
+- Published week packages are readonly in place; to prepare another revision or another week, change `weekOf` and save a new draft shell
+- Exported context now includes planner role, auto-generated learning profile, suggested coaching focus, confirmed weekly focus, runtime practice budget, carry-over context, and JSON self-check guidance
+- Storage:
+  - week packages in `localStorage` via [week-package-store.js](/d:/Violin/js/week-package-store.js)
+  - uploaded score assets in IndexedDB via [source-asset-store.js](/d:/Violin/js/source-asset-store.js)
+- Maintenance: `author/README.md`
+
 ## Deployment
 
 - GitHub Pages 发布分支：`main`
@@ -104,6 +119,19 @@ node --check js/audio-engine.js
 - 待办事项： [TODOS.md](/d:/Violin/TODOS.md)
 
 ## Current Constraints
+
+### Published Weekly Authoring And Staff Notation
+
+- [lesson-current.js](/d:/Violin/data/lesson-current.js) remains the embedded fallback for the active week.
+- User-visible history now comes from locally published week packages, plus a single readonly embedded baseline for the most recent real lesson week when the current week has not been published yet.
+- The authoring flow lives in the standalone [author/index.html](/d:/Violin/author/index.html) subapp. v1 uses `external_codex_manual`: export context from the app, review the auto-generated learning profile plus coaching focus, generate JSON in Codex IDE, then import and publish locally.
+- The plan page now shows published weeks in its horizontal selector, and may also show the previous real lesson as a readonly baseline. Historical entries are always read-only and surface local completion records only when they exist.
+- Late-entry weeks are supported through `publishedFromDayNumber` plus per-day `planned | inactive | catchup` statuses. Runtime planning still reuses [practice-plan.js](/d:/Violin/js/practice-plan.js).
+- [lesson-archive.js](/d:/Violin/data/lesson-archive.js) is now seed/reference data only. It no longer drives the runtime history shown to students.
+- Piece cards now support two notation views: the original beginner-friendly notation and a generated staff-notation view.
+- The staff view is generated from existing `measures`, `timeSignature`, and `bpm` data. It is a simplified learning score, not a pixel-perfect reproduction of the teacher's original sheet.
+- The notation coordinator lives in [score-display.js](/d:/Violin/js/ui/score-display.js), while SVG staff building and rendering live in [staff-notation.js](/d:/Violin/js/staff-notation.js) and [staff-display.js](/d:/Violin/js/ui/staff-display.js).
+- In staff mode, clicking notes, rests, tempo, or time-signature symbols opens an inline explainer backed by [music-theory.js](/d:/Violin/js/music-theory.js), with an optional deep link into the theory page.
 
 - 当前只读取一份活动课程数据，不支持多课程管理
 - 当前没有后端，同步和账号系统不在范围内

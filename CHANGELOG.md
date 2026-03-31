@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2.0] - 2026-03-30
+
+### Added
+
+- Added a standalone weekly authoring app with local draft shells, Codex export files, JSON import, and one-click publish flow for weekly lesson packages
+- Added published week-package storage, lesson catalog tests, and authoring helpers that infer learning profile, coaching focus, and review candidates from recent practice history
+- Added simplified SVG staff notation rendering with clickable notation explainers and related unit coverage for notation models and week-package utilities
+
+### Changed
+
+- Switched the student app to published-only practice history, while preserving the previous real lesson as a readonly baseline before the current week is published
+- Updated weekly planning and score display flows to support late-published weeks, review-week authoring, and score-mode switching between beginner cells and staff notation
+- Expanded authoring, architecture, requirements, and development docs to cover weekly publishing, local asset handling, and practice-history behavior
+
+### Fixed
+
+- Prevented published week packages from being silently edited in place through the authoring draft and import paths
+- Hardened imported lesson planning so missing `estimatedMinutes` no longer produces invalid section durations
+- Corrected late-published week completion rates so inactive pre-release days do not drag down the inferred learning profile
+
 ## [0.1.1.4] - 2026-03-27
 
 ### Changed

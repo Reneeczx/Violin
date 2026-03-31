@@ -33,3 +33,9 @@
 - Build one timeline model and reuse it for audio scheduling, beat markers, and note highlighting.
 - Test session switching paths explicitly: `reference -> demo`, `click -> demo`, `demo -> click(no-op)`.
 - Clear service workers and caches during browser QA when touching app shell files.
+
+### General Debugging Heuristics
+- Do not treat the most obvious symptom as the most likely root cause.
+- When one surface works and another does not, compare the execution paths before changing shared parameters.
+- Use disconfirming evidence early: if one counterexample breaks the current hypothesis, lower confidence immediately.
+- For any bug around start/stop/toggle/switch flows, check state ownership and timing before checking presentation details.

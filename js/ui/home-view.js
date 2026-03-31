@@ -40,6 +40,7 @@ let _dayNumber = 0;
 let _timerEl = null;
 let _currentSpeedFactors = {};
 let _activeMeasureIndexes = {};
+let _notationModes = {};
 
 export function init(container) {
   _container = container;
@@ -49,6 +50,7 @@ export function show() {
   _lesson = window.CURRENT_LESSON;
   _currentSpeedFactors = {};
   _activeMeasureIndexes = {};
+  _notationModes = {};
 
   if (!_lesson) {
     _container.innerHTML = `
@@ -152,6 +154,16 @@ function render() {
     _container.appendChild(createTip(_lesson.teacherNotes, '👩‍🏫'));
   }
 
+  if (_plan.dayStatus === 'inactive') {
+    const startDay = _lesson.publishedFromDayNumber || 1;
+    _container.appendChild(createTip(`这周计划会从第 ${startDay} 天开始生效；今天仍处于计划发布前。`, '🗓️'));
+    return;
+  }
+
+  if (_plan.dayStatus === 'catchup') {
+    _container.appendChild(createTip('这是压缩后的补练日计划：把剩余天数里的关键任务集中在今天之后完成。', '⚡'));
+  }
+
   _plan.sections.forEach((section) => {
     const isCompleted = Tracking.isSectionCompleted(_lesson.weekOf, _dayNumber, section.id);
     _container.appendChild(renderSection(section, isCompleted));
@@ -171,10 +183,10 @@ function renderSection(section, isCompleted) {
         : '';
 
   const badgeText = section.type === 'warmup' || section.type === 'cooldown'
-    ? `${section.durationMinutes}分钟`
+    ? `${section.durationMinutes} 分钟`
     : section.recommendedBpm
       ? formatTempoMarking(section.recommendedBpm)
-      : `${section.durationMinutes}分钟`;
+      : `${section.durationMinutes} 分钟`;
 
   const card = createCard({
     title: `${section.icon} ${section.title}`,
@@ -209,8 +221,12 @@ function renderSection(section, isCompleted) {
 
 function renderPieceSection(card, section) {
   ensureSectionSpeed(section);
+  ensureNotationMode(section);
 
-  const scoreHandles = renderPieceScore(card, section);
+  const scoreHandles = renderPieceScore(card, section, {
+    getNotationMode,
+    setNotationMode,
+  });
   const { bpmEl } = renderPiecePlaybackControls(card, section, {
     getSpeed: getSectionSpeed,
     setSpeed: setSectionSpeed,
@@ -281,8 +297,8 @@ function createTheoryButton(section) {
 
   const topicId = section.measures ? 'tempo' : 'open-strings';
   const label = section.measures
-    ? '📌 看懂 ♩=48 / pizz.'
-    : '📌 看懂空弦和音名';
+    ? '🎼 看懂速度 / 五线谱'
+    : '🎻 看懂空弦和音名';
   const theoryBtn = createElement('button', 'btn btn--ghost', label);
   theoryBtn.style.marginTop = 'var(--space-sm)';
   theoryBtn.style.alignSelf = 'flex-start';
@@ -308,6 +324,10 @@ function createCompletionRow(card, section, isCompleted) {
 }
 
 function renderCompleteButton() {
+  if (!_plan.sections.length) {
+    return;
+  }
+
   const allSectionIds = _plan.sections.map((section) => section.id);
   const allDone = Tracking.isDayCompleted(_lesson.weekOf, _dayNumber, allSectionIds);
 
@@ -350,12 +370,26 @@ function ensureSectionSpeed(section) {
   }
 }
 
+function ensureNotationMode(section) {
+  if (_notationModes[section.id] == null) {
+    _notationModes[section.id] = 'beginner';
+  }
+}
+
 function getSectionSpeed(sectionId) {
   return _currentSpeedFactors[sectionId] || 1;
 }
 
 function setSectionSpeed(sectionId, speed) {
   _currentSpeedFactors[sectionId] = speed;
+}
+
+function getNotationMode(sectionId) {
+  return _notationModes[sectionId] || 'beginner';
+}
+
+function setNotationMode(sectionId, mode) {
+  _notationModes[sectionId] = mode;
 }
 
 function getSessionContext() {

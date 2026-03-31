@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#E8913A">
+  <title>Violin 每周设置</title>
+  <link rel="icon" href="../favicon.ico">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="./css/author.css">
+  <script src="../data/lesson-current.js"></script>
+  <script>
+    if (window.CURRENT_LESSON && !window.EMBEDDED_CURRENT_LESSON) {
+      window.EMBEDDED_CURRENT_LESSON = JSON.parse(JSON.stringify(window.CURRENT_LESSON));
+    }
+  </script>
+</head>
+<body class="author-page">
+  <div class="author-page__shell">
+    <header class="author-page__header safe-area-top">
+      <div class="author-page__header-inner">
+        <div class="author-page__eyebrow">Weekly Authoring Console</div>
+        <h1 class="author-page__title">Violin 每周设置</h1>
+        <p class="author-page__summary">
+          先整理老师要求和原始乐谱，再导出给 Codex；拿到结构化周包 JSON 后回到这里预览并发布。
+        </p>
+        <div class="author-page__actions">
+          <a class="btn btn--secondary" href="../index.html">返回练习应用</a>
+          <a class="btn btn--ghost" href="../learning/index.html">查看学习页</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="main author-main" id="author-main"></main>
+  </div>
+
+  <script src="../js/page-bootstrap.js?v=20260330"></script>
+  <script>
+    window.PageBootstrap.start({
+      containerId: 'author-main',
+      moduleSrc: 'js/app.js?v=20260330',
+      pageName: '每周设置',
+      command: 'py -m http.server 8124 --bind 127.0.0.1',
+      previewUrl: 'http://127.0.0.1:8124/author/',
+    });
+  </script>
+</body>
+</html>

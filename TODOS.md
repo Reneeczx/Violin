@@ -7,6 +7,7 @@
 - [ ] Implement the learning-mode MVP as a standalone page centered on graph + concepts + code reading
 - [ ] Add 8-10 project-grounded beginner concepts and bind each concept to real modules
 - [ ] Add 1-2 core code explanations for each core module with file references and follow-up reading paths
+- [ ] Design a deferred Bilibili recommendation batch that suggests a few level-appropriate reference videos for the current week and lets the builder review them before attaching links to tasks
 
 ## Design
 

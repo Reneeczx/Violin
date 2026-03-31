@@ -5,7 +5,7 @@
 - Product: `Violin`
 - Doc type: `PRD`
 - Status: `Active`
-- Last updated: `2026-03-27`
+- Last updated: `2026-03-28`
 - Primary owner: `Product / Builder`
 - Related docs:
   - [README.md](/d:/Violin/README.md)
@@ -204,7 +204,64 @@
 - 是否需要老师可编辑课程数据的半自动工作流
 - 是否要增加家长视角的“今日完成反馈摘要”
 
+## Published History, Weekly Authoring, And Staff Notation MVP
+
+### Goal
+
+Add three compatible capabilities without changing the app into a multi-course system:
+
+- Let students revisit only the weeks that were formally published on the local device
+- Let the builder create, export, import, preview, and publish weekly packages through a separate authoring console
+- Let users switch a piece card from beginner notation to a simplified generated staff view with inline theory help
+
+### Must-Have Behavior
+
+- The plan page must show published weeks in one horizontal selector, and may also show the previous real lesson as a readonly baseline before the current week is published
+- Historical weeks must be read-only
+- If a historical published week has local completion data, the UI should surface it; if not, the UI should still show the formal assignment without errors
+- The runtime active-week resolution order must be:
+  - published package for the current week
+  - embedded `CURRENT_LESSON` fallback
+- The builder must have a separate authoring entry that supports:
+  - creating a draft shell
+  - reviewing an auto-generated learning profile derived from recent weeks
+  - reviewing and optionally editing system-suggested coaching focus
+  - exporting `week-manifest.json`
+  - exporting `codex-prompt.md`
+  - importing strict `week-package.json`
+  - previewing the generated week before publish
+  - publishing locally
+- Imported week packages must support `publishedFromDayNumber` plus per-day `planned | inactive | catchup` statuses
+- Weeks published after Monday must show pre-release days as inactive instead of inventing retroactive tasks
+- The builder must be able to trigger a review-week draft without requiring a fresh teacher assignment
+- Piece cards must keep beginner notation as the default view
+- Piece cards must offer a local toggle between beginner notation and staff notation
+- Staff notation must be generated from existing `measures`, `timeSignature`, and `bpm` data
+- Clicking notes, rests, tempo marks, time signature, or leading-rest symbols in staff mode must open a compact explainer tied to the current piece
+- The explainer must support deep linking into the theory route
+
+### Constraints
+
+- `window.CURRENT_LESSON` remains the embedded fallback for the active week
+- Student-facing history must come from locally published week packages, with one allowed fallback: the previous real lesson as a readonly embedded baseline
+- v1 generation uses `external_codex_manual`; the app must not require an API key or call an AI API directly
+- Week packages and source assets remain local to the device; no backend or cross-device sync
+- Staff notation is a simplified learning score, not a full engraving or teacher-sheet reproduction workflow
+- No new third-party dependencies
+- Existing playback, progress, recording, and learning-subapp flows must keep working
+
+### Deferred
+
+- In-app API-based generation
+- Cross-device sync for week packages or source assets
+- Editing historical weeks
+- Historical recording browser
+- Full music engraving fidelity
+- Step-by-step score tutorials inside the piece card
+- A scheduled Bilibili recommendation batch that maps the student's current learning profile to a small set of weekly reference videos and attaches those links to relevant tasks after human review
+
 ## 15. Learning Mode MVP Draft
+
 
 ### Goal
 
